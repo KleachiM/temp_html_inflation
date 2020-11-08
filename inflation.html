@@ -1,0 +1,67 @@
+<!DOCTYPE html>{% load static %}
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Инфляция в России</title>
+    <!--Import Google Icon Font-->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  </head>
+
+  <body>
+    {% block content %}
+      <div class="row">
+        <h1 class="col s12">Инфляция в России</h1>
+        <div class="col s12 m8">
+          <table class="u-full-width">
+            <thead>
+              {% for field in fields %}
+                <td>
+                  <th>{{ field }}</th>
+                </td>
+              {% endfor %}
+            </thead>
+            <tbody>
+            {% for year in years %}
+              <tr>
+                {% for key, value in year.items %}
+                  <td></td>
+                  {% if key == 'Суммарная' %}
+                    {% cycle 'silver' as color silent %}
+                  {% elif key != 'Год' and key != 'Суммарная' %}
+                    {% if value %}
+                      {% if value < 0 %}
+                        {% cycle 'green' as color silent %}
+                      {% else %}
+                        {% if value >= 0 and value < 1 %}
+                          {% cycle 'white' as color silent %}
+                        {% elif value >= 1 and value < 2 %}
+                          {% cycle '#F08080' as color silent %}
+                        {% elif value >= 2 and value < 5 %}
+                          {% cycle '#FF0000' as color silent %}
+                        {% else %}
+                          {% cycle '#8B0000' as color silent %}
+                        {% endif %}
+                      {% endif %}
+                    {% endif %}
+                  {% endif %}
+                  {% if value %}
+                    <td style="background-color: {{ color }}"> {{ value }} </td>
+                  {% else %}
+                    <td>-</td>
+                  {% endif %}
+              {% endfor %}
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    {% endblock %}
+
+  </body>
+</html>
